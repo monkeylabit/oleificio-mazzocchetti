@@ -1,0 +1,938 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" href="img/logo.webp" type="image/webp">
+<title>Oleificio Mazzocchetti</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Oleificio Mazzocchetti: olio extravergine di oliva nuovo da Treciminiere, Atri (TE), Abruzzo. Prenota la tua scorta su WhatsApp o al 377 229 3124.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@300;400;500;600&family=Marcellus&display=swap">
+<style>
+/* Layout: "Dal ramo alla bottiglia" — una sola pagina che segue l'olio: hero video, olio nuovo, indice di maturazione, territorio, lavorazione, ordine, contatti.
+   Look unico e scuro, preso dal logo: carbone verde-oliva, oro della goccia, verde foglia, bronzo delle radici. Una sola fascia chiara color argento-foglia per l'ordine. */
+:root {
+  color-scheme: dark;
+  --ink: #15170f;          /* fondo pagina, carbone con riflesso oliva */
+  --ink-2: #1d2016;        /* superfici rialzate */
+  --ink-3: #272b1f;
+  --cream: #ede4cc;        /* testo, dalle lettere del logo */
+  --muted: #a8a68f;
+  --line: rgba(237, 228, 204, .14);
+  --gold: #d6ac47;         /* la goccia del logo */
+  --gold-soft: #e9cd84;
+  --gold-deep: #8a6a1c;
+  --leaf: #8f9b4b;         /* foglie del logo */
+  --bronze: #b9805a;       /* radici del logo */
+  --silver: #e2e5d8;       /* rovescio della foglia d'ulivo */
+  --silver-2: #f0f1e9;
+  --ink-on-silver: #1b1e15;
+  --muted-on-silver: #5b5e4c;
+  --line-on-silver: rgba(27, 30, 21, .16);
+
+  --f-display: "Marcellus", "Trajan Pro", "Cinzel", Georgia, "Times New Roman", serif;
+  --f-body: "Albert Sans", "Helvetica Neue", Arial, system-ui, sans-serif;
+
+  --t-xs: .8125rem;
+  --t-s: .9375rem;
+  --t-m: 1.0625rem;
+  --t-l: 1.3125rem;
+  --t-xl: clamp(1.75rem, 1.2rem + 2vw, 2.5rem);
+  --t-xxl: clamp(2.25rem, 1.4rem + 3.6vw, 3.75rem);
+  --t-hero: clamp(2.9rem, 1.6rem + 6.2vw, 6.4rem);
+
+  --gutter-l: max(16px, env(safe-area-inset-left, 0px));
+  --gutter-r: max(16px, env(safe-area-inset-right, 0px));
+  --ease: cubic-bezier(.2, .7, .2, 1);
+}
+@media (min-width: 760px) {
+  :root {
+    --gutter-l: max(40px, env(safe-area-inset-left, 0px));
+    --gutter-r: max(40px, env(safe-area-inset-right, 0px));
+  }
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { scroll-behavior: smooth; scroll-padding-top: 84px; }
+body {
+  margin: 0;
+  background: var(--ink);
+  color: var(--cream);
+  font-family: var(--f-body);
+  font-size: var(--t-m);
+  line-height: 1.6;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+img { display: block; max-width: 100%; height: auto; }
+a { color: inherit; }
+h1, h2, h3 { font-family: var(--f-display); font-weight: 400; line-height: 1.08; margin: 0; text-wrap: balance; letter-spacing: .005em; }
+p { margin: 0; }
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; border-radius: 4px; }
+
+.wrap {
+  width: 100%;
+  max-width: 1240px;
+  margin-inline: auto;
+  padding-left: var(--gutter-l);
+  padding-right: var(--gutter-r);
+}
+.eyebrow {
+  font-size: var(--t-xs);
+  text-transform: uppercase;
+  letter-spacing: .22em;
+  font-weight: 500;
+  color: var(--gold);
+}
+
+/* grana leggera come la carta del logo */
+.grain {
+  position: fixed; inset: 0; pointer-events: none; z-index: 60; opacity: .07; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---------- Bottoni ---------- */
+.btn {
+  position: relative; overflow: hidden;
+  display: inline-flex; align-items: center; justify-content: center; gap: .6em;
+  min-height: 48px; padding: .75em 1.4em;
+  border-radius: 999px; border: 1px solid transparent;
+  font: 500 var(--t-s)/1.2 var(--f-body); letter-spacing: .02em;
+  text-decoration: none; cursor: pointer;
+  transition: transform .35s var(--ease), background-color .35s, border-color .35s, color .35s;
+}
+.btn svg { width: 1.15em; height: 1.15em; flex: none; }
+.btn::after {
+  content: ""; position: absolute; top: 0; bottom: 0; left: -60%; width: 40%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, .45), transparent);
+  transform: skewX(-18deg); transition: left .7s var(--ease); pointer-events: none;
+}
+.btn:hover::after { left: 130%; }
+.btn:hover { transform: translateY(-2px); }
+.btn-gold { background: var(--gold); color: #1a1607; }
+.btn-gold:hover { background: var(--gold-soft); }
+.btn-ghost { border-color: rgba(237, 228, 204, .35); color: var(--cream); background: rgba(21, 23, 15, .25); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+.btn-ghost:hover { border-color: var(--gold); color: var(--gold-soft); }
+.btn-dark { background: var(--ink-on-silver); color: var(--silver-2); }
+.btn-dark:hover { background: #2c3122; }
+
+/* ---------- Header ---------- */
+.site-header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+  padding-top: env(safe-area-inset-top, 0px);
+  transition: background-color .4s, border-color .4s, backdrop-filter .4s;
+  border-bottom: 1px solid transparent;
+}
+.site-header.scrolled {
+  background: rgba(21, 23, 15, .86);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border-bottom-color: var(--line);
+}
+.header-inner { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 14px; transition: padding .4s var(--ease); }
+.site-header.scrolled .header-inner { padding-block: 8px; }
+.brand { display: flex; align-items: center; gap: 12px; text-decoration: none; min-width: 0; }
+.brand img { width: 52px; height: auto; transition: width .4s var(--ease); filter: drop-shadow(0 4px 14px rgba(0, 0, 0, .5)); }
+.site-header.scrolled .brand img { width: 42px; }
+.brand span { font-family: var(--f-display); font-size: 1.125rem; line-height: 1.1; letter-spacing: .04em; }
+.brand small { display: block; font-family: var(--f-body); font-size: .6875rem; letter-spacing: .26em; text-transform: uppercase; color: var(--leaf); margin-top: 3px; }
+.nav { display: flex; align-items: center; gap: 28px; }
+.nav a:not(.btn) { text-decoration: none; font-size: var(--t-s); color: var(--cream); opacity: .82; position: relative; padding-block: 6px; }
+.nav a:not(.btn)::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: var(--gold); transform: scaleX(0); transform-origin: left; transition: transform .4s var(--ease); }
+.nav a:not(.btn):hover { opacity: 1; }
+.nav a:not(.btn):hover::after { transform: scaleX(1); }
+.nav .btn { min-height: 42px; padding: .6em 1.2em; }
+@media (max-width: 860px) {
+  .nav a:not(.btn) { display: none; }
+  .brand span { font-size: 1rem; }
+}
+
+/* ---------- Hero ---------- */
+.hero {
+  position: relative; isolation: isolate; overflow: hidden;
+  min-height: min(88vh, 920px);
+  min-height: min(88svh, 920px);
+  display: flex; align-items: flex-end;
+  padding-top: 120px; padding-bottom: clamp(40px, 7vh, 88px);
+}
+.hero-media { position: absolute; inset: 0; z-index: -2; overflow: hidden; background: var(--ink-2); }
+.hero-media img, .hero-media video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 45%; }
+.hero.in .hero-media img, .hero.in .hero-media video { animation: settle 2.8s var(--ease) both; }
+@keyframes settle { from { transform: scale(1.1); } to { transform: none; } }
+.hero-media video { opacity: 0; transition: opacity 1s ease; }
+.hero-media video.ready { opacity: 1; }
+.video-toggle {
+  position: absolute; z-index: 2;
+  right: var(--gutter-r); bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+  width: 42px; height: 42px; padding: 0; border-radius: 50%;
+  display: grid; place-items: center; cursor: pointer;
+  border: 1px solid rgba(237, 228, 204, .35); background: rgba(21, 23, 15, .45); color: var(--cream);
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  transition: border-color .3s, color .3s;
+}
+.video-toggle:hover { border-color: var(--gold); color: var(--gold-soft); }
+.video-toggle svg { width: 16px; height: 16px; }
+.video-toggle .i-play, .video-toggle.paused .i-pause { display: none; }
+.video-toggle.paused .i-play { display: block; }
+.hero::before {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background:
+    linear-gradient(180deg, rgba(21, 23, 15, .7) 0%, rgba(21, 23, 15, .08) 26%, rgba(21, 23, 15, .2) 55%, rgba(21, 23, 15, .94) 100%),
+    linear-gradient(90deg, rgba(21, 23, 15, .82) 0%, rgba(21, 23, 15, .22) 58%, rgba(21, 23, 15, 0) 100%);
+}
+.hero-content { display: grid; gap: 22px; max-width: 760px; min-width: 0; }
+.hero h1 { font-size: var(--t-hero); line-height: .98; }
+.hero h1 .line { display: block; overflow: hidden; padding-bottom: .08em; }
+.hero h1 .line > span { display: inline-block; }
+.hero h1 em { font-style: normal; color: var(--gold); }
+.hero-lede { font-size: var(--t-l); line-height: 1.5; font-weight: 300; max-width: 34em; color: rgba(237, 228, 204, .9); }
+.hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 6px; }
+.hero-actions .btn-ghost { font-variant-numeric: tabular-nums; letter-spacing: .06em; }
+
+.seal {
+  position: absolute; right: var(--gutter-r); bottom: clamp(84px, 10vh, 116px);
+  width: 148px; height: 148px; color: var(--gold);
+}
+.seal svg.ring { width: 100%; height: 100%; animation: spin 26s linear infinite; }
+.seal .drop { position: absolute; inset: 0; margin: auto; width: 34px; height: 34px; }
+.seal text { font: 500 9.6px var(--f-body); letter-spacing: .2em; text-transform: uppercase; fill: var(--cream); }
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (max-width: 860px) { .seal { display: none; } }
+
+.scroll-cue { position: absolute; left: 50%; bottom: 18px; width: 1px; height: 44px; background: linear-gradient(var(--gold), transparent); transform-origin: top; animation: cue 2.4s ease-in-out infinite; }
+@keyframes cue { 0% { transform: scaleY(0); opacity: 1; } 60% { transform: scaleY(1); opacity: 1; } 100% { transform: scaleY(1); opacity: 0; } }
+@media (max-width: 860px) { .scroll-cue { display: none; } }
+
+/* sequenza di apertura: parte da uno stato visibile */
+@keyframes lineUp { from { transform: translateY(105%); } to { transform: none; } }
+@keyframes rise { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: none; } }
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+.hero.in .line > span { animation: lineUp 1.1s var(--ease) both; animation-delay: var(--d, 0s); }
+.hero.in .hero-rise { animation: rise 1s var(--ease) both; animation-delay: var(--d, 0s); }
+.hero.in .seal { animation: fade 1.6s ease both; animation-delay: 1s; }
+[data-reveal].in { animation: rise 1s var(--ease) both; animation-delay: var(--d, 0s); }
+
+/* ---------- Olio nuovo ---------- */
+.section { padding-block: clamp(72px, 10vw, 140px); }
+.nuovo-grid { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: clamp(32px, 6vw, 96px); align-items: center; }
+.nuovo-text { display: grid; gap: 24px; min-width: 0; }
+.nuovo-text h2 { font-size: var(--t-xxl); }
+.nuovo-text p { color: rgba(237, 228, 204, .84); max-width: 34em; }
+.spec { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 28px; margin: 12px 0 0; border-top: 1px solid var(--line); }
+.spec div { padding: 16px 0; border-bottom: 1px solid var(--line); min-width: 0; }
+.spec dt { font-size: var(--t-xs); text-transform: uppercase; letter-spacing: .18em; color: var(--leaf); margin-bottom: 4px; }
+.spec dd { margin: 0; font-size: var(--t-s); }
+.photo-frame { position: relative; margin: 0; }
+.photo-frame .img-wrap { overflow: hidden; border-radius: 220px 220px 6px 6px; aspect-ratio: 4 / 5; max-width: 100%; background: var(--ink-2); }
+.photo-frame img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.4s var(--ease); }
+.photo-frame:hover img { transform: scale(1.04); }
+.photo-frame figcaption { margin-top: 14px; font-size: var(--t-xs); color: var(--muted); letter-spacing: .02em; }
+.photo-frame::before {
+  content: ""; position: absolute; inset: -14px -14px auto auto; width: 70%; height: 70%;
+  border: 1px solid rgba(214, 172, 71, .45); border-radius: 220px 220px 6px 6px; z-index: -1;
+}
+@media (max-width: 860px) {
+  .nuovo-grid { grid-template-columns: minmax(0, 1fr); }
+  .photo-frame { max-width: 460px; }
+}
+
+/* ---------- Indice di maturazione ---------- */
+.maturo { background: var(--ink-2); border-block: 1px solid var(--line); }
+.maturo-head { display: grid; gap: 18px; max-width: 760px; margin-bottom: clamp(36px, 5vw, 64px); }
+.maturo-head h2 { font-size: var(--t-xxl); }
+.maturo-head p { color: rgba(237, 228, 204, .84); }
+.maturo-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(28px, 5vw, 72px); align-items: center; }
+.olive-stage { position: relative; min-width: 0; }
+.olive-stage svg { width: 100%; height: auto; max-width: 520px; display: block; margin-inline: auto; overflow: visible; }
+.olive-stage .skin { transition: fill .7s ease; }
+.olive-stage .blush, .olive-stage .bloom { transition: opacity .7s ease; }
+.olive-stage .lbl { font: 500 11px var(--f-body); letter-spacing: .2em; text-transform: uppercase; fill: var(--muted); }
+.readout { display: grid; gap: 18px; min-width: 0; }
+.readout-index { display: flex; align-items: baseline; gap: 16px; }
+.readout-index .num { font-family: var(--f-display); font-size: clamp(4rem, 3rem + 4vw, 6.5rem); line-height: .9; color: var(--gold); font-variant-numeric: tabular-nums; min-width: 1ch; }
+.readout-index .of { color: var(--muted); font-size: var(--t-s); }
+.readout h3 { font-size: var(--t-xl); }
+.readout .desc { color: rgba(237, 228, 204, .84); min-height: 3.2em; }
+.readout .oil { padding: 16px 18px; border: 1px solid var(--line); border-radius: 6px; background: rgba(21, 23, 15, .5); font-size: var(--t-s); }
+.readout .oil b { display: block; font-weight: 500; color: var(--gold-soft); font-size: var(--t-xs); text-transform: uppercase; letter-spacing: .18em; margin-bottom: 4px; }
+
+.scale { margin-top: clamp(32px, 4vw, 52px); }
+.scale-groups { display: grid; grid-template-columns: 1.5fr 2fr 3.5fr; padding-inline: 13px; margin-bottom: 10px; }
+.scale-groups span { font-size: var(--t-xs); letter-spacing: .16em; text-transform: uppercase; color: var(--muted); border-left: 1px solid var(--line); padding-left: 10px; }
+.scale-groups span:first-child { border-left: 0; padding-left: 0; }
+.range { -webkit-appearance: none; appearance: none; width: 100%; height: 26px; background: transparent; cursor: pointer; margin: 0; }
+.range::-webkit-slider-runnable-track { height: 10px; border-radius: 10px; background: linear-gradient(90deg, #6e8f2e 0%, #a3b254 14%, #b9ac6a 28%, #8a4f6c 43%, #2e2433 57%, #2b2232 100%); box-shadow: inset 0 0 0 1px rgba(237, 228, 204, .18); }
+.range::-moz-range-track { height: 10px; border-radius: 10px; background: linear-gradient(90deg, #6e8f2e 0%, #a3b254 14%, #b9ac6a 28%, #8a4f6c 43%, #2e2433 57%, #2b2232 100%); box-shadow: inset 0 0 0 1px rgba(237, 228, 204, .18); }
+.range::-webkit-slider-thumb { -webkit-appearance: none; width: 26px; height: 26px; margin-top: -8px; border-radius: 50%; background: var(--gold); border: 3px solid var(--ink); box-shadow: 0 0 0 1px var(--gold), 0 6px 18px rgba(0, 0, 0, .5); transition: transform .2s; }
+.range::-moz-range-thumb { width: 20px; height: 20px; border-radius: 50%; background: var(--gold); border: 3px solid var(--ink); box-shadow: 0 0 0 1px var(--gold), 0 6px 18px rgba(0, 0, 0, .5); }
+.range:active::-webkit-slider-thumb { transform: scale(1.15); }
+.range:focus-visible { outline: none; }
+.range:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 3px var(--gold-soft), 0 6px 18px rgba(0, 0, 0, .5); }
+.scale-ticks { display: flex; justify-content: space-between; padding-inline: 3px; margin-top: 8px; font-size: var(--t-xs); color: var(--muted); font-variant-numeric: tabular-nums; }
+.scale-ticks button { all: unset; cursor: pointer; width: 20px; text-align: center; border-radius: 4px; }
+.scale-ticks button[aria-pressed="true"] { color: var(--gold); font-weight: 600; }
+.scale-ticks button:focus-visible { outline: 2px solid var(--gold); }
+.scale-note { margin-top: 18px; font-size: var(--t-xs); color: var(--muted); max-width: 60em; }
+@media (max-width: 860px) {
+  .maturo-grid { grid-template-columns: minmax(0, 1fr); }
+  .scale-groups span { font-size: .6875rem; letter-spacing: .1em; }
+}
+
+/* ---------- Territorio ---------- */
+.territorio { position: relative; overflow: hidden; isolation: isolate; padding-block: clamp(96px, 14vw, 200px); }
+.territorio .bg { position: absolute; inset: -12% 0; z-index: -2; will-change: transform; }
+.territorio .bg img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 60%; }
+.territorio::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, rgba(21, 23, 15, .92) 0%, rgba(21, 23, 15, .72) 46%, rgba(21, 23, 15, .15) 100%); }
+.territorio-card { max-width: 540px; display: grid; gap: 22px; }
+.territorio-card h2 { font-size: var(--t-xxl); }
+.territorio-card p { color: rgba(237, 228, 204, .88); }
+.facts { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; padding: 0; list-style: none; }
+.facts li { font-size: var(--t-xs); letter-spacing: .1em; text-transform: uppercase; padding: 8px 14px; border: 1px solid rgba(237, 228, 204, .28); border-radius: 999px; background: rgba(21, 23, 15, .35); }
+@media (max-width: 760px) {
+  .territorio::before { background: linear-gradient(180deg, rgba(21, 23, 15, .35) 0%, rgba(21, 23, 15, .88) 45%, rgba(21, 23, 15, .95) 100%); }
+  .territorio { padding-top: 260px; }
+  .territorio .bg img { object-position: 66% 55%; }
+}
+
+/* ---------- Lavorazione ---------- */
+.steps-head { display: grid; gap: 16px; max-width: 700px; margin-bottom: clamp(40px, 5vw, 72px); }
+.steps-head h2 { font-size: var(--t-xxl); }
+.steps { position: relative; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(24px, 4vw, 56px); list-style: none; margin: 0; padding: 0; }
+.steps::before, .steps::after { content: ""; position: absolute; left: 0; right: 0; top: 30px; height: 1px; }
+.steps::before { background: var(--line); }
+.steps::after { background: linear-gradient(90deg, var(--leaf), var(--gold)); transform: scaleX(0); transform-origin: left; transition: transform 2.2s var(--ease); }
+.steps.in::after { transform: scaleX(1); }
+.step { position: relative; z-index: 1; display: grid; gap: 14px; align-content: start; min-width: 0; }
+.step .num { width: 60px; height: 60px; border-radius: 50%; display: grid; place-items: center; background: var(--ink); border: 1px solid var(--gold); color: var(--gold); font-family: var(--f-display); font-size: 1.25rem; }
+.step h3 { font-size: var(--t-l); font-family: var(--f-display); }
+.step p { color: rgba(237, 228, 204, .8); font-size: var(--t-s); }
+@media (max-width: 760px) {
+  .steps { grid-template-columns: minmax(0, 1fr); }
+  .steps::before, .steps::after { left: 30px; right: auto; top: 0; bottom: 0; width: 1px; height: auto; }
+  .steps::after { background: linear-gradient(180deg, var(--leaf), var(--gold)); transform: scaleY(0); transform-origin: top; }
+  .steps.in::after { transform: scaleY(1); }
+  .step { grid-template-columns: 60px minmax(0, 1fr); column-gap: 20px; }
+  .step .num { grid-row: span 2; }
+}
+
+/* ---------- Ordina (fascia chiara) ---------- */
+.ordina { background: var(--silver); color: var(--ink-on-silver); }
+.ordina .eyebrow { color: var(--gold-deep); }
+.ordina-head { display: grid; gap: 16px; max-width: 720px; margin-bottom: clamp(32px, 4vw, 56px); }
+.ordina-head h2 { font-size: var(--t-xxl); }
+.ordina-head p { color: var(--muted-on-silver); }
+.ordina-grid { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: clamp(20px, 3vw, 40px); align-items: start; }
+.formats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.format {
+  display: grid; grid-template-rows: 150px auto auto auto; gap: 10px; justify-items: center; text-align: center;
+  padding: 22px 16px 18px; border-radius: 8px; background: var(--silver-2); border: 1px solid var(--line-on-silver);
+  transition: border-color .3s, box-shadow .3s, transform .4s var(--ease);
+}
+.format.active { border-color: var(--gold-deep); box-shadow: 0 0 0 1px var(--gold-deep), 0 18px 40px -22px rgba(27, 30, 21, .5); }
+.format:hover { transform: translateY(-3px); }
+.format svg { height: 100%; width: auto; align-self: end; color: var(--ink-on-silver); }
+.format svg .fill-oil { fill: var(--gold); }
+.format h3 { font-size: 1.25rem; font-family: var(--f-display); }
+.format .size { font-variant-numeric: tabular-nums; color: var(--muted-on-silver); font-size: var(--t-s); margin-top: -6px; }
+.format .price { font-size: var(--t-xs); letter-spacing: .12em; text-transform: uppercase; color: var(--gold-deep); font-weight: 500; }
+.stepper { display: inline-flex; align-items: center; border: 1px solid var(--line-on-silver); border-radius: 999px; background: var(--silver); margin-top: 4px; }
+.stepper button { all: unset; width: 40px; height: 40px; display: grid; place-items: center; cursor: pointer; font-size: 1.25rem; border-radius: 50%; color: var(--ink-on-silver); }
+.stepper button:hover { background: rgba(27, 30, 21, .08); }
+.stepper button:focus-visible { outline: 2px solid var(--gold-deep); }
+.stepper button:disabled { opacity: .3; cursor: default; }
+.stepper output { min-width: 2.2ch; text-align: center; font-variant-numeric: tabular-nums; font-weight: 600; }
+
+.summary { position: sticky; top: 96px; display: grid; gap: 16px; padding: 26px; border-radius: 8px; background: var(--ink-on-silver); color: var(--cream); }
+.summary h3 { font-size: 1.375rem; font-family: var(--f-display); }
+.summary ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; font-variant-numeric: tabular-nums; }
+.summary li { display: flex; justify-content: space-between; gap: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--line); font-size: var(--t-s); }
+.summary li.empty { color: var(--muted); border: 0; }
+.field { display: grid; gap: 6px; }
+.field label { font-size: var(--t-xs); text-transform: uppercase; letter-spacing: .16em; color: var(--muted); }
+.field input, .field textarea {
+  width: 100%; font: 400 var(--t-s) var(--f-body); color: var(--cream);
+  background: var(--ink-3); border: 1px solid var(--line); border-radius: 6px; padding: 11px 12px; resize: vertical;
+}
+.field input:focus, .field textarea:focus { outline: none; border-color: var(--gold); }
+.summary .btn { width: 100%; }
+.summary .btn[aria-disabled="true"] { opacity: .45; pointer-events: none; }
+.summary .alt { font-size: var(--t-xs); color: var(--muted); text-align: center; }
+.summary .alt span { color: var(--cream); font-variant-numeric: tabular-nums; user-select: all; }
+@media (max-width: 960px) {
+  .ordina-grid { grid-template-columns: minmax(0, 1fr); }
+  .summary { position: static; }
+}
+@media (max-width: 560px) {
+  .formats { grid-template-columns: minmax(0, 1fr); }
+  .format { grid-template-columns: 70px minmax(0, 1fr); grid-template-rows: auto; text-align: left; justify-items: start; align-items: center; column-gap: 16px; row-gap: 4px; padding: 16px; }
+  .format svg { grid-row: span 4; height: 104px; align-self: center; justify-self: center; }
+  .format .size { margin-top: 0; }
+}
+
+/* ---------- Contatti ---------- */
+.contatti-grid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: clamp(32px, 6vw, 96px); align-items: end; }
+.contatti h2 { font-size: var(--t-xxl); margin-top: 16px; }
+.phone { display: block; margin-top: 28px; font-family: var(--f-display); font-size: clamp(2.4rem, 1.4rem + 4.4vw, 4.75rem); line-height: 1; color: var(--gold); text-decoration: none; font-variant-numeric: tabular-nums; letter-spacing: .02em; user-select: all; }
+.contact-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+.copy-msg { font-size: var(--t-xs); color: var(--leaf); min-height: 1.4em; margin-top: 10px; }
+.where { display: grid; gap: 0; border-top: 1px solid var(--line); }
+.where div { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 16px; padding: 18px 0; border-bottom: 1px solid var(--line); }
+.where dt { font-size: var(--t-xs); text-transform: uppercase; letter-spacing: .18em; color: var(--leaf); padding-top: 3px; }
+.where dd { margin: 0; }
+.where a { color: var(--gold-soft); text-underline-offset: 3px; }
+@media (max-width: 860px) { .contatti-grid { grid-template-columns: minmax(0, 1fr); } }
+
+/* ---------- Footer ---------- */
+.site-footer { border-top: 1px solid var(--line); padding-block: 56px 40px; }
+.footer-inner { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 28px; align-items: center; }
+.footer-inner img { width: 96px; }
+.footer-inner p { color: var(--muted); font-size: var(--t-s); }
+.footer-inner .copy { font-size: var(--t-xs); color: var(--muted); text-align: right; }
+@media (max-width: 760px) {
+  .footer-inner { grid-template-columns: minmax(0, 1fr); justify-items: start; }
+  .footer-inner .copy { text-align: left; }
+  .site-footer { padding-bottom: calc(110px + env(safe-area-inset-bottom, 0px)); }
+}
+
+/* ---------- Barra mobile ---------- */
+.mobile-bar {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 55;
+  display: none; gap: 10px;
+  padding: 10px var(--gutter-r) calc(10px + env(safe-area-inset-bottom, 0px)) var(--gutter-l);
+  background: rgba(21, 23, 15, .92); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid var(--line);
+  transform: translateY(110%); transition: transform .5s var(--ease);
+}
+.mobile-bar .btn { flex: 1; }
+.mobile-bar.show { transform: none; }
+@media (max-width: 760px) { .mobile-bar { display: flex; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  html { scroll-behavior: auto; }
+  .territorio .bg { transform: none !important; }
+}
+</style>
+</head>
+<body>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "Oleificio Mazzocchetti",
+  "description": "Olio extravergine di oliva nuovo da Treciminiere, Atri (TE)",
+  "telephone": "+39 377 229 3124",
+  "address": { "@type": "PostalAddress", "addressLocality": "Treciminiere, Atri", "postalCode": "64032", "addressRegion": "TE", "addressCountry": "IT" }
+}
+</script>
+
+<div class="grain" aria-hidden="true"></div>
+
+<header class="site-header" id="header">
+  <div class="wrap header-inner">
+    <a class="brand" href="#top" aria-label="Oleificio Mazzocchetti, torna all'inizio">
+      <img src="img/logo.webp" alt="" width="542" height="579">
+      <span>Mazzocchetti<small>Oleificio</small></span>
+    </a>
+    <nav class="nav" aria-label="Sezioni">
+      <a href="#olio">L'olio nuovo</a>
+      <a href="#raccolta">La raccolta</a>
+      <a href="#territorio">Territorio</a>
+      <a href="#contatti">Contatti</a>
+      <a class="btn btn-gold" href="#ordina">Ordina</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <!-- ================= HERO ================= -->
+  <section class="hero" id="hero" aria-label="Olio nuovo Mazzocchetti">
+    <div class="hero-media">
+      <picture>
+        <source media="(max-aspect-ratio: 1/1)" srcset="img/hero-verticale.webp">
+        <img src="img/hero-orizzontale.webp" alt="" fetchpriority="high">
+      </picture>
+      <video id="heroVideo" muted loop playsinline disablepictureinpicture disableremoteplayback aria-hidden="true"
+        data-v="video/hero-verticale.mp4" data-h="video/hero-orizzontale.mp4"></video>
+    </div>
+    <button class="video-toggle" id="videoToggle" type="button" aria-label="Metti in pausa il video" hidden>
+      <svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14M16 5v14" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+      <svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4.8v14.4L19.5 12z" fill="currentColor"/></svg>
+    </button>
+
+    <div class="wrap">
+      <div class="hero-content">
+        <p class="eyebrow hero-rise" style="--d:.15s">Campagna olearia 2026/27 · Treciminiere, Atri</p>
+        <h1>
+          <span class="line"><span style="--d:.3s">È arrivato</span></span>
+          <span class="line"><span style="--d:.45s">l'<em>olio nuovo</em>.</span></span>
+        </h1>
+        <p class="hero-lede hero-rise" style="--d:.75s">Extravergine di oliva dalle nostre colline in Abruzzo, venduto direttamente da chi lo produce. Prenota adesso la tua scorta per l'anno.</p>
+        <div class="hero-actions hero-rise" style="--d:.95s">
+          <a class="btn btn-gold" href="#ordina">
+            Prenota l'olio nuovo
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a class="btn btn-ghost" href="tel:+393772293124">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>
+            377 229 3124
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="seal" aria-hidden="true">
+      <svg class="ring" viewBox="0 0 160 160">
+        <defs><path id="circ" d="M80,80 m-62,0 a62,62 0 1,1 124,0 a62,62 0 1,1 -124,0"/></defs>
+        <circle cx="80" cy="80" r="76" fill="rgba(21,23,15,.45)" stroke="rgba(214,172,71,.6)" stroke-width="1"/>
+        <circle cx="80" cy="80" r="46" fill="none" stroke="rgba(214,172,71,.35)" stroke-width="1"/>
+        <text><textPath href="#circ" startOffset="0" textLength="384" lengthAdjust="spacing">Olio nuovo · Raccolta 2026 · Extravergine ·</textPath></text>
+      </svg>
+      <svg class="drop" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 1.8S4.6 10.3 4.6 15a7.4 7.4 0 0 0 14.8 0C19.4 10.3 12 1.8 12 1.8z"/></svg>
+    </div>
+    <span class="scroll-cue" aria-hidden="true"></span>
+  </section>
+
+  <!-- ================= OLIO NUOVO ================= -->
+  <section class="section" id="olio">
+    <div class="wrap nuovo-grid">
+      <div class="nuovo-text">
+        <p class="eyebrow" data-reveal>L'olio nuovo</p>
+        <h2 data-reveal style="--d:.08s">Verde, intenso, con quel pizzico in gola.</h2>
+        <p data-reveal style="--d:.16s">L'olio nuovo è l'extravergine dei primi giorni dopo la frangitura. Ha un colore verde acceso e un profumo di erba e di oliva fresca. L'amaro e il piccante che senti in gola sono il segno dei polifenoli, più ricchi nell'olio appena fatto.</p>
+        <p data-reveal style="--d:.22s">È l'olio da usare a crudo: sul pane abbrustolito, sui legumi, sulle verdure di stagione.</p>
+        <dl class="spec" data-reveal style="--d:.3s">
+          <div><dt>Categoria</dt><dd>Olio extravergine di oliva</dd></div>
+          <div><dt>Origine</dt><dd>Treciminiere, Atri (TE)</dd></div>
+          <div><dt>Campagna</dt><dd>2026/27</dd></div>
+          <div><dt>Vendita</dt><dd>Diretta dal produttore</dd></div>
+        </dl>
+      </div>
+      <figure class="photo-frame" data-reveal style="--d:.2s">
+        <div class="img-wrap"><img src="img/olive.webp" alt="Ramo di ulivo con olive verdi e le prime olive viola, reti verdi stese a terra" loading="lazy" width="1200" height="1600"></div>
+        <figcaption>Le nostre olive a metà ottobre: quasi tutte verdi, le prime già viola. Le reti sono stese.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ================= INDICE DI MATURAZIONE ================= -->
+  <section class="section maturo" id="raccolta">
+    <div class="wrap">
+      <div class="maturo-head">
+        <p class="eyebrow" data-reveal>La raccolta</p>
+        <h2 data-reveal style="--d:.08s">Il gusto dell'olio si decide sul ramo.</h2>
+        <p data-reveal style="--d:.16s">Mentre matura, l'oliva cambia colore: dal verde al viola, poi al nero. Prima si raccoglie, più l'olio è fruttato, amaro e piccante, ma le olive ne rendono meno. Sposta il cursore per vedere come cambia l'oliva, fuori e dentro.</p>
+      </div>
+
+      <div class="maturo-grid">
+        <div class="olive-stage" data-reveal style="--d:.1s">
+          <svg viewBox="0 0 400 270" role="img" aria-labelledby="oliveTitle">
+            <title id="oliveTitle">Oliva intera e oliva tagliata a metà, colorate secondo l'indice di maturazione scelto</title>
+            <defs>
+              <radialGradient id="shine" cx="35%" cy="28%" r="60%">
+                <stop offset="0" stop-color="#fff" stop-opacity=".55"/>
+                <stop offset=".35" stop-color="#fff" stop-opacity=".08"/>
+                <stop offset="1" stop-color="#000" stop-opacity=".28"/>
+              </radialGradient>
+              <radialGradient id="blushGrad" cx="60%" cy="55%" r="55%">
+                <stop offset="0" stop-color="#9c4f73" stop-opacity="1"/>
+                <stop offset=".7" stop-color="#9c4f73" stop-opacity=".55"/>
+                <stop offset="1" stop-color="#9c4f73" stop-opacity="0"/>
+              </radialGradient>
+              <radialGradient id="flesh" cx="50%" cy="50%" r="50%">
+                <stop id="fl0" offset="0" stop-color="#ece7c6"/>
+                <stop id="fl1" offset="1" stop-color="#ece7c6"/>
+                <stop id="fl2" offset="1" stop-color="#6d3a5f"/>
+                <stop offset="1" stop-color="#5d2f51"/>
+              </radialGradient>
+              <clipPath id="wholeClip"><ellipse cx="0" cy="0" rx="60" ry="80"/></clipPath>
+            </defs>
+
+            <!-- ramo e foglia -->
+            <path d="M40 32 C 90 40, 120 52, 132 64" fill="none" stroke="#8a7a5c" stroke-width="3" stroke-linecap="round"/>
+            <path d="M78 41 C 60 14, 26 8, 4 14 C 30 24, 52 34, 78 41 Z" fill="#6f7c3a"/>
+            <path d="M78 41 C 56 30, 30 20, 4 14" fill="none" stroke="#9aa65a" stroke-width="1"/>
+
+            <!-- oliva intera -->
+            <g transform="translate(140 150) rotate(-16)">
+              <path d="M0 -80 C 2 -88, 0 -94, -6 -98" fill="none" stroke="#8a7a5c" stroke-width="3" stroke-linecap="round"/>
+              <ellipse class="skin" id="skinWhole" cx="0" cy="0" rx="60" ry="80" fill="#a3b254"/>
+              <g clip-path="url(#wholeClip)">
+                <ellipse class="blush" id="blushWhole" cx="18" cy="14" rx="58" ry="66" fill="url(#blushGrad)" opacity="0"/>
+              </g>
+              <ellipse class="bloom" id="bloomWhole" cx="0" cy="0" rx="60" ry="80" fill="#8b93a8" opacity="0"/>
+              <ellipse cx="0" cy="0" rx="60" ry="80" fill="url(#shine)"/>
+            </g>
+
+            <!-- oliva tagliata -->
+            <g transform="translate(305 158) rotate(-8)">
+              <ellipse class="skin" id="skinHalf" cx="0" cy="0" rx="62" ry="82" fill="#a3b254"/>
+              <ellipse cx="0" cy="0" rx="56" ry="76" fill="url(#flesh)"/>
+              <ellipse cx="0" cy="0" rx="20" ry="36" fill="#cdb98e" stroke="#a8936a" stroke-width="1.5"/>
+              <path d="M0 -30 C 6 -10, 6 10, 0 30" fill="none" stroke="#a8936a" stroke-width="1"/>
+            </g>
+
+            <text class="lbl" x="140" y="262" text-anchor="middle">Buccia</text>
+            <text class="lbl" x="305" y="262" text-anchor="middle">Polpa</text>
+          </svg>
+        </div>
+
+        <div class="readout" aria-live="polite" data-reveal style="--d:.2s">
+          <div class="readout-index"><span class="num" id="mNum">2</span><span class="of">indice di maturazione<br>su una scala da 0 a 7</span></div>
+          <h3 id="mTitle">Inizio invaiatura</h3>
+          <p class="desc" id="mDesc">Buccia verde con macchie rossastre su meno di metà del frutto.</p>
+          <p class="oil" id="mOil"><b>Nell'olio</b><span id="mOilText">Equilibrio tra profumi, gusto e resa: fruttato deciso, amaro e piccante ben presenti.</span></p>
+        </div>
+      </div>
+
+      <div class="scale" data-reveal style="--d:.25s">
+        <div class="scale-groups" aria-hidden="true"><span>Verde</span><span>Invaiatura</span><span>Matura</span></div>
+        <label for="maturity" class="eyebrow" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Indice di maturazione</label>
+        <input class="range" type="range" id="maturity" min="0" max="7" step="1" value="2">
+        <div class="scale-ticks" id="ticks"></div>
+        <p class="scale-note">Scala dell'indice di maturazione di Jaén (0–7), usata in olivicoltura per scegliere quando raccogliere: si guardano il colore della buccia e quello della polpa.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= TERRITORIO ================= -->
+  <section class="territorio" id="territorio">
+    <div class="bg" id="terrBg" aria-hidden="true"><img src="img/treciminiere.webp" alt="" loading="lazy"></div>
+    <div class="wrap">
+      <div class="territorio-card">
+        <p class="eyebrow" data-reveal>Il territorio</p>
+        <h2 data-reveal style="--d:.08s">Treciminiere, sulle colline di Atri.</h2>
+        <p data-reveal style="--d:.16s">I nostri ulivi crescono a Treciminiere, frazione di Atri, in provincia di Teramo: colline d'argilla tra il Gran Sasso e il mare Adriatico, coltivate a ulivo da generazioni.</p>
+        <p data-reveal style="--d:.22s">Atri fa parte delle Città dell'Olio, l'associazione nazionale dei comuni con una tradizione olivicola.</p>
+        <ul class="facts" data-reveal style="--d:.3s">
+          <li>Atri (TE)</li>
+          <li>Abruzzo</li>
+          <li>Città dell'Olio</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= LAVORAZIONE ================= -->
+  <section class="section" id="lavorazione">
+    <div class="wrap">
+      <div class="steps-head">
+        <p class="eyebrow" data-reveal>Dal ramo alla bottiglia</p>
+        <h2 data-reveal style="--d:.08s">Come nasce il nostro olio.</h2>
+      </div>
+      <ol class="steps" id="steps">
+        <li class="step" data-reveal style="--d:.1s">
+          <span class="num">I</span>
+          <h3>Raccolta</h3>
+          <p>Stendiamo le reti sotto gli alberi e facciamo cadere le olive dai rami, pianta per pianta.</p>
+        </li>
+        <li class="step" data-reveal style="--d:.3s">
+          <span class="num">II</span>
+          <h3>Frangitura</h3>
+          <p>Le olive appena raccolte vanno al frantoio: lavaggio, frangitura, gramolatura ed estrazione dell'olio.</p>
+        </li>
+        <li class="step" data-reveal style="--d:.5s">
+          <span class="num">III</span>
+          <h3>Olio nuovo</h3>
+          <p>L'olio esce verde e profumato. Lo conserviamo al riparo da luce e calore e lo prepariamo per il tuo ordine.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ================= ORDINA ================= -->
+  <section class="section ordina" id="ordina">
+    <div class="wrap">
+      <div class="ordina-head">
+        <p class="eyebrow" data-reveal>Ordina</p>
+        <h2 data-reveal style="--d:.08s">Prenota il tuo olio nuovo.</h2>
+        <p data-reveal style="--d:.16s">Scegli formati e quantità: ti prepariamo un messaggio WhatsApp già scritto da inviarci. Prezzo e disponibilità te li confermiamo noi in risposta.</p>
+      </div>
+
+      <div class="ordina-grid">
+        <div class="formats" id="formats" data-reveal style="--d:.2s"></div>
+
+        <aside class="summary" data-reveal style="--d:.3s" aria-labelledby="sumTitle">
+          <h3 id="sumTitle">Il tuo ordine</h3>
+          <ul id="sumList"></ul>
+          <div class="field">
+            <label for="ordName">Nome</label>
+            <input id="ordName" type="text" autocomplete="name" placeholder="Come ti chiami">
+          </div>
+          <div class="field">
+            <label for="ordNote">Note</label>
+            <textarea id="ordNote" rows="2" placeholder="Es. quando passi a ritirarlo"></textarea>
+          </div>
+          <a class="btn btn-gold" id="waLink" href="https://wa.me/393772293124" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.7-1.4.1-.2 0-.3 0-.5l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.1 5.1 0 0 0 1.1 2.7 11.7 11.7 0 0 0 4.5 4c1.7.7 2.3.8 3.2.7.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.1-1.2l-.4-.3z"/></svg>
+            Invia l'ordine su WhatsApp
+          </a>
+          <p class="alt">Preferisci chiamare? <span>377 229 3124</span></p>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CONTATTI ================= -->
+  <section class="section contatti" id="contatti">
+    <div class="wrap contatti-grid">
+      <div>
+        <p class="eyebrow" data-reveal>Contatti</p>
+        <h2 data-reveal style="--d:.08s">Chiamaci o scrivici per ordini e informazioni.</h2>
+        <a class="phone" id="phoneNum" href="tel:+393772293124" data-reveal style="--d:.16s">377 229 3124</a>
+        <div class="contact-actions" data-reveal style="--d:.24s">
+          <a class="btn btn-gold" href="tel:+393772293124">Chiama</a>
+          <a class="btn btn-ghost" href="https://wa.me/393772293124" target="_blank" rel="noopener">WhatsApp</a>
+          <button class="btn btn-ghost" type="button" id="copyBtn">Copia numero</button>
+        </div>
+        <p class="copy-msg" id="copyMsg" role="status"></p>
+      </div>
+      <dl class="where" data-reveal style="--d:.2s">
+        <div><dt>Dove</dt><dd>Treciminiere, frazione di Atri (TE), Abruzzo<br><a href="https://www.google.com/maps/search/?api=1&amp;query=Treciminiere%2C%20Atri%20TE" target="_blank" rel="noopener">Apri in Google Maps</a></dd></div>
+        <div><dt>Telefono</dt><dd>+39 377 229 3124</dd></div>
+        <div><dt>Prodotto</dt><dd>Olio extravergine di oliva nuovo, campagna 2026/27</dd></div>
+      </dl>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <img src="img/logo.webp" alt="Oleificio Mazzocchetti" loading="lazy" width="542" height="579">
+    <p>Oleificio Mazzocchetti · Olio extravergine di oliva<br>Treciminiere, Atri (TE)</p>
+    <p class="copy">© 2026 Oleificio Mazzocchetti</p>
+  </div>
+</footer>
+
+<div class="mobile-bar" id="mobileBar">
+  <a class="btn btn-ghost" href="tel:+393772293124">Chiama</a>
+  <a class="btn btn-gold" href="#ordina">Ordina</a>
+</div>
+
+<script>
+(function () {
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---- Apertura hero ---- */
+  var hero = document.getElementById('hero');
+  requestAnimationFrame(function () { hero.classList.add('in'); });
+
+  /* ---- Video hero ----
+     Verticale sui telefoni, taglio orizzontale sugli schermi larghi.
+     Il video sfuma sopra l'immagine di anteprima solo quando sta davvero andando.
+     Se non parte, riprova da solo: scaricandolo intero, o al primo tocco (risparmio energetico). */
+  var vid = document.getElementById('heroVideo');
+  var toggle = document.getElementById('videoToggle');
+  if (vid && toggle) {
+    var portrait = window.matchMedia('(max-aspect-ratio: 1/1)');
+    var current = '', triedBlob = false, userPaused = reduce, inView = true, watchdog = null;
+    vid.muted = true;
+    var pick = function () { return portrait.matches ? vid.dataset.v : vid.dataset.h; };
+    var tryPlay = function () {
+      if (userPaused || !inView || !current) return;
+      try { var p = vid.play(); if (p && p.catch) p.catch(function () {}); } catch (e) {}
+    };
+    var viaBlob = function () {
+      if (triedBlob || !window.fetch || !window.URL || !current) return;
+      triedBlob = true;
+      var want = current;
+      fetch(want).then(function (r) { if (!r.ok) throw new Error(r.status); return r.blob(); })
+        .then(function (b) { if (want !== current) return; vid.src = URL.createObjectURL(b); vid.load(); tryPlay(); })
+        .catch(function () {});
+    };
+    var load = function (src) {
+      current = src; triedBlob = false;
+      vid.classList.remove('ready');
+      vid.preload = 'auto'; vid.src = src; vid.load(); tryPlay();
+      clearTimeout(watchdog);
+      watchdog = setTimeout(function () { if (vid.readyState < 2) viaBlob(); }, 10000);
+    };
+    var sync = function () {
+      toggle.classList.toggle('paused', userPaused);
+      toggle.setAttribute('aria-label', userPaused ? 'Riproduci il video' : 'Metti in pausa il video');
+    };
+    vid.addEventListener('playing', function () { vid.classList.add('ready'); toggle.hidden = false; clearTimeout(watchdog); });
+    vid.addEventListener('error', viaBlob);
+    toggle.addEventListener('click', function () {
+      userPaused = !userPaused; sync();
+      if (userPaused) vid.pause(); else if (!current) load(pick()); else tryPlay();
+    });
+    var onOrient = function () { if (current && pick() !== current) load(pick()); };
+    if (portrait.addEventListener) portrait.addEventListener('change', onOrient); else if (portrait.addListener) portrait.addListener(onOrient);
+    var kick = function () { if (!vid.classList.contains('ready')) tryPlay(); };
+    ['touchstart', 'pointerdown', 'keydown'].forEach(function (ev) { window.addEventListener(ev, kick, { passive: true, once: true }); });
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (en) {
+        inView = en[0].isIntersecting;
+        if (!inView) vid.pause(); else tryPlay();
+      }).observe(hero);
+    }
+    sync();
+    if (reduce) toggle.hidden = false; else load(pick());
+  }
+
+  /* ---- Header e barra mobile ---- */
+  var header = document.getElementById('header');
+  var bar = document.getElementById('mobileBar');
+  var terrBg = document.getElementById('terrBg');
+  var terr = terrBg.parentElement;
+  var ticking = false;
+  function onScroll() {
+    var y = window.scrollY || window.pageYOffset;
+    header.classList.toggle('scrolled', y > 40);
+    bar.classList.toggle('show', y > hero.offsetHeight * 0.6);
+    if (!reduce) {
+      var r = terr.getBoundingClientRect();
+      if (r.bottom > 0 && r.top < window.innerHeight) {
+        var lim = r.height * 0.1;
+        var t = Math.max(-lim, Math.min(lim, (r.top + r.height / 2 - window.innerHeight / 2) * -0.12));
+        terrBg.style.transform = 'translate3d(0,' + t.toFixed(1) + 'px,0)';
+      }
+    }
+    ticking = false;
+  }
+  window.addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
+  onScroll();
+
+  /* ---- Comparsa delle sezioni (partono visibili, si animano quando arrivano) ---- */
+  var targets = document.querySelectorAll('[data-reveal], #steps');
+  if (!reduce && 'IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, { rootMargin: '0px 0px 12% 0px', threshold: 0 });
+    targets.forEach(function (el) { io.observe(el); });
+  } else {
+    targets.forEach(function (el) { el.classList.add('in'); });
+  }
+
+  /* ---- Indice di maturazione ---- */
+  var M = [
+    { t: 'Verde intenso', d: 'Buccia verde intenso, polpa chiara e soda.', skin: '#6e8f2e', blush: 0, bloom: 0, pulp: 0, g: 0 },
+    { t: 'Verde-giallastra', d: 'Buccia verde che schiarisce verso il giallo paglierino.', skin: '#a3b254', blush: 0, bloom: 0, pulp: 0, g: 0 },
+    { t: 'Inizio invaiatura', d: 'Buccia verde con macchie rossastre su meno di metà del frutto.', skin: '#b4ad66', blush: .55, bloom: 0, pulp: 0, g: 1 },
+    { t: 'Fine invaiatura', d: 'Buccia rossastra o viola su più di metà del frutto.', skin: '#8a4f6c', blush: .9, bloom: 0, pulp: 0, g: 1 },
+    { t: 'Buccia nera', d: 'Buccia nera, polpa ancora bianca.', skin: '#2e2433', blush: 0, bloom: .3, pulp: 0, g: 2 },
+    { t: 'Polpa che vira', d: 'Buccia nera, polpa viola per meno della metà dello spessore.', skin: '#2b2232', blush: 0, bloom: .3, pulp: .35, g: 2 },
+    { t: 'Polpa quasi viola', d: 'Buccia nera, polpa viola fin quasi al nocciolo.', skin: '#29202f', blush: 0, bloom: .3, pulp: .75, g: 2 },
+    { t: 'Piena maturazione', d: 'Buccia nera, polpa viola fino al nocciolo.', skin: '#261d2b', blush: 0, bloom: .3, pulp: 1, g: 2 }
+  ];
+  var OIL = [
+    'Fruttato verde intenso, amaro e piccante decisi. Resa in olio più bassa.',
+    'Equilibrio tra profumi, gusto e resa: fruttato deciso, amaro e piccante ben presenti.',
+    'Gusto più dolce e morbido, profumi più tenui. Resa in olio più alta.'
+  ];
+  var range = document.getElementById('maturity');
+  var ticks = document.getElementById('ticks');
+  var els = {
+    num: document.getElementById('mNum'), title: document.getElementById('mTitle'),
+    desc: document.getElementById('mDesc'), oil: document.getElementById('mOilText'),
+    skins: [document.getElementById('skinWhole'), document.getElementById('skinHalf')],
+    blush: document.getElementById('blushWhole'), bloom: document.getElementById('bloomWhole'),
+    fl1: document.getElementById('fl1'), fl2: document.getElementById('fl2')
+  };
+  for (var i = 0; i < M.length; i++) {
+    var b = document.createElement('button');
+    b.type = 'button'; b.textContent = i; b.setAttribute('aria-label', 'Indice ' + i + ': ' + M[i].t);
+    b.addEventListener('click', (function (v) { return function () { range.value = v; setM(v); }; })(i));
+    ticks.appendChild(b);
+  }
+  var pulpNow = 0, pulpTarget = 0, raf = null;
+  function drawPulp() {
+    pulpNow += (pulpTarget - pulpNow) * (reduce ? 1 : 0.12);
+    if (Math.abs(pulpTarget - pulpNow) < 0.002) pulpNow = pulpTarget;
+    var edge = 1 - pulpNow;
+    els.fl1.setAttribute('offset', Math.max(0, edge - 0.02).toFixed(3));
+    els.fl2.setAttribute('offset', Math.min(1, edge + 0.04).toFixed(3));
+    raf = pulpNow !== pulpTarget ? requestAnimationFrame(drawPulp) : null;
+  }
+  function setM(v) {
+    v = +v; var m = M[v];
+    els.num.textContent = v; els.title.textContent = m.t; els.desc.textContent = m.d; els.oil.textContent = OIL[m.g];
+    els.skins.forEach(function (s) { s.setAttribute('fill', m.skin); s.style.fill = m.skin; });
+    els.blush.style.opacity = m.blush; els.bloom.style.opacity = m.bloom;
+    pulpTarget = m.pulp; if (!raf) raf = requestAnimationFrame(drawPulp);
+    Array.prototype.forEach.call(ticks.children, function (b, i) { b.setAttribute('aria-pressed', i === v ? 'true' : 'false'); });
+    range.setAttribute('aria-valuetext', v + ', ' + m.t);
+  }
+  range.addEventListener('input', function () { setM(range.value); });
+  setM(range.value);
+
+  /* ---- Ordine via WhatsApp ---- */
+  var ICON = {
+    bottle: '<svg viewBox="0 0 60 130" aria-hidden="true"><path class="fill-oil" d="M15 70h30v50a4 4 0 0 1-4 4H19a4 4 0 0 1-4-4z" opacity=".9"/><path d="M24 4h12v6h-1v20c0 7 10 11 10 22v68a4 4 0 0 1-4 4H19a4 4 0 0 1-4-4V52c0-11 10-15 10-22V10h-1z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><rect x="19" y="78" width="22" height="26" rx="1" fill="#f0f1e9" stroke="currentColor" stroke-width="1.5"/><path d="M30 84s-5 6-5 9a5 5 0 0 0 10 0c0-3-5-9-5-9z" fill="currentColor"/></svg>',
+    tin3: '<svg viewBox="0 0 80 130" aria-hidden="true"><path d="M24 48v-9h30v9" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><rect x="48" y="38" width="9" height="10" rx="1" fill="currentColor"/><rect x="14" y="48" width="52" height="76" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><rect x="15" y="62" width="50" height="40" class="fill-oil" opacity=".9"/><path d="M40 72s-6 7-6 11a6 6 0 0 0 12 0c0-4-6-11-6-11z" fill="#f0f1e9"/></svg>',
+    tin5: '<svg viewBox="0 0 80 130" aria-hidden="true"><path d="M20 30v-11h36v11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><rect x="52" y="19" width="10" height="11" rx="1" fill="currentColor"/><rect x="8" y="30" width="64" height="94" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><rect x="9" y="48" width="62" height="52" class="fill-oil" opacity=".9"/><path d="M40 60s-7 8-7 13a7 7 0 0 0 14 0c0-5-7-13-7-13z" fill="#f0f1e9"/></svg>'
+  };
+  var F = [
+    { id: 'b075', name: 'Bottiglia', size: '0,75 L', icon: 'bottle', q: 0 },
+    { id: 'l3', name: 'Latta', size: '3 L', icon: 'tin3', q: 0 },
+    { id: 'l5', name: 'Latta', size: '5 L', icon: 'tin5', q: 1 }
+  ];
+  var wrap = document.getElementById('formats');
+  F.forEach(function (f) {
+    var c = document.createElement('div');
+    c.className = 'format'; c.id = 'fmt-' + f.id;
+    c.innerHTML = ICON[f.icon] +
+      '<h3>' + f.name + '</h3><p class="size">' + f.size + '</p><p class="price">Prezzo su richiesta</p>' +
+      '<div class="stepper" role="group" aria-label="Quantità ' + f.name + ' ' + f.size + '">' +
+      '<button type="button" data-d="-1" aria-label="Togli una ' + f.name.toLowerCase() + ' ' + f.size + '">−</button>' +
+      '<output id="q-' + f.id + '" aria-live="polite">0</output>' +
+      '<button type="button" data-d="1" aria-label="Aggiungi una ' + f.name.toLowerCase() + ' ' + f.size + '">+</button></div>';
+    c.querySelectorAll('button').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        f.q = Math.max(0, Math.min(50, f.q + (+btn.dataset.d))); renderOrder();
+      });
+    });
+    wrap.appendChild(c);
+  });
+  var list = document.getElementById('sumList');
+  var wa = document.getElementById('waLink');
+  var nameIn = document.getElementById('ordName');
+  var noteIn = document.getElementById('ordNote');
+  function renderOrder() {
+    var items = F.filter(function (f) { return f.q > 0; });
+    F.forEach(function (f) {
+      document.getElementById('q-' + f.id).textContent = f.q;
+      var card = document.getElementById('fmt-' + f.id);
+      card.classList.toggle('active', f.q > 0);
+      card.querySelector('[data-d="-1"]').disabled = f.q === 0;
+    });
+    list.innerHTML = items.length
+      ? items.map(function (f) { return '<li><span>' + f.name + ' ' + f.size + '</span><span>× ' + f.q + '</span></li>'; }).join('')
+      : '<li class="empty">Aggiungi almeno un formato.</li>';
+    var lines = ["Ciao! Vorrei prenotare l'olio nuovo Mazzocchetti:"];
+    items.forEach(function (f) { lines.push('• ' + f.name + ' ' + f.size + ' × ' + f.q); });
+    var n = nameIn.value.trim(), note = noteIn.value.trim();
+    if (n) lines.push('Nome: ' + n);
+    if (note) lines.push('Note: ' + note);
+    wa.href = 'https://wa.me/393772293124?text=' + encodeURIComponent(lines.join('\n'));
+    wa.setAttribute('aria-disabled', items.length ? 'false' : 'true');
+  }
+  nameIn.addEventListener('input', renderOrder);
+  noteIn.addEventListener('input', renderOrder);
+  renderOrder();
+
+  /* ---- Copia numero ---- */
+  var copyBtn = document.getElementById('copyBtn');
+  var copyMsg = document.getElementById('copyMsg');
+  copyBtn.addEventListener('click', function () {
+    var num = '3772293124';
+    function fallback() {
+      var el = document.getElementById('phoneNum');
+      var sel = window.getSelection(); var r = document.createRange();
+      r.selectNodeContents(el); sel.removeAllRanges(); sel.addRange(r);
+      copyMsg.textContent = 'Numero selezionato: copialo con Copia.';
+    }
+    try {
+      navigator.clipboard.writeText(num).then(function () { copyMsg.textContent = 'Numero copiato.'; }, fallback);
+    } catch (e) { fallback(); }
+  });
+})();
+</script>
+</body>
+</html>
