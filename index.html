@@ -337,7 +337,10 @@ p { margin: 0; }
 .format svg .fill-oil { fill: var(--gold); }
 .format h3 { font-size: 1.25rem; font-family: var(--f-display); }
 .format .size { font-variant-numeric: tabular-nums; color: var(--muted-on-silver); font-size: var(--t-s); margin-top: -6px; }
-.format .price { font-size: var(--t-xs); letter-spacing: .12em; text-transform: uppercase; color: var(--gold-deep); font-weight: 500; }
+.format .price { font-family: var(--f-display); font-size: 1.5rem; line-height: 1.1; color: var(--ink-on-silver); font-variant-numeric: tabular-nums; }
+.price-tag { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-top: 4px; }
+.price-tag .num { font-family: var(--f-display); font-size: clamp(2.25rem, 1.6rem + 2.4vw, 3.25rem); line-height: 1; color: var(--gold-deep); font-variant-numeric: tabular-nums; }
+.price-tag .per { font-size: var(--t-xs); letter-spacing: .18em; text-transform: uppercase; color: var(--muted-on-silver); font-weight: 500; }
 .stepper { display: inline-flex; align-items: center; border: 1px solid var(--line-on-silver); border-radius: 999px; background: var(--silver); margin-top: 4px; }
 .stepper button { all: unset; width: 40px; height: 40px; display: grid; place-items: center; cursor: pointer; font-size: 1.25rem; border-radius: 50%; color: var(--ink-on-silver); }
 .stepper button:hover { background: rgba(27, 30, 21, .08); }
@@ -350,6 +353,7 @@ p { margin: 0; }
 .summary ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; font-variant-numeric: tabular-nums; }
 .summary li { display: flex; justify-content: space-between; gap: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--line); font-size: var(--t-s); }
 .summary li.empty { color: var(--muted); border: 0; }
+.summary li.total { border-bottom: 0; padding-top: 4px; font-size: var(--t-m); font-weight: 600; color: var(--gold-soft); }
 .field { display: grid; gap: 6px; }
 .field label { font-size: var(--t-xs); text-transform: uppercase; letter-spacing: .16em; color: var(--muted); }
 .field input, .field textarea {
@@ -507,7 +511,7 @@ p { margin: 0; }
         <dl class="spec" data-reveal style="--d:.3s">
           <div><dt>Categoria</dt><dd>Olio extravergine di oliva</dd></div>
           <div><dt>Origine</dt><dd>Treciminiere, Atri (TE)</dd></div>
-          <div><dt>Campagna</dt><dd>2026/27</dd></div>
+          <div><dt>Prezzo</dt><dd>15 € al litro</dd></div>
           <div><dt>Vendita</dt><dd>Diretta dal produttore</dd></div>
         </dl>
       </div>
@@ -649,7 +653,8 @@ p { margin: 0; }
       <div class="ordina-head">
         <p class="eyebrow" data-reveal>Ordina</p>
         <h2 data-reveal style="--d:.08s">Prenota il tuo olio nuovo.</h2>
-        <p data-reveal style="--d:.16s">Scegli formati e quantità: ti prepariamo un messaggio WhatsApp già scritto da inviarci. Prezzo e disponibilità te li confermiamo noi in risposta.</p>
+        <p class="price-tag" data-reveal style="--d:.12s"><span class="num">15 €</span><span class="per">al litro</span></p>
+        <p data-reveal style="--d:.16s">Scegli formati e quantità: ti prepariamo un messaggio WhatsApp già scritto, con il totale, da inviarci. Ti rispondiamo noi per confermare l'ordine.</p>
       </div>
 
       <div class="ordina-grid">
@@ -868,17 +873,23 @@ p { margin: 0; }
     tin3: '<svg viewBox="0 0 80 130" aria-hidden="true"><path d="M24 48v-9h30v9" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><rect x="48" y="38" width="9" height="10" rx="1" fill="currentColor"/><rect x="14" y="48" width="52" height="76" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><rect x="15" y="62" width="50" height="40" class="fill-oil" opacity=".9"/><path d="M40 72s-6 7-6 11a6 6 0 0 0 12 0c0-4-6-11-6-11z" fill="#f0f1e9"/></svg>',
     tin5: '<svg viewBox="0 0 80 130" aria-hidden="true"><path d="M20 30v-11h36v11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><rect x="52" y="19" width="10" height="11" rx="1" fill="currentColor"/><rect x="8" y="30" width="64" height="94" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><rect x="9" y="48" width="62" height="52" class="fill-oil" opacity=".9"/><path d="M40 60s-7 8-7 13a7 7 0 0 0 14 0c0-5-7-13-7-13z" fill="#f0f1e9"/></svg>'
   };
+  var PREZZO_LITRO = 15;
   var F = [
-    { id: 'b075', name: 'Bottiglia', size: '0,75 L', icon: 'bottle', q: 0 },
-    { id: 'l3', name: 'Latta', size: '3 L', icon: 'tin3', q: 0 },
-    { id: 'l5', name: 'Latta', size: '5 L', icon: 'tin5', q: 1 }
+    { id: 'b075', name: 'Bottiglia', size: '0,75 L', litri: 0.75, icon: 'bottle', q: 0 },
+    { id: 'l3', name: 'Latta', size: '3 L', litri: 3, icon: 'tin3', q: 0 },
+    { id: 'l5', name: 'Latta', size: '5 L', litri: 5, icon: 'tin5', q: 1 }
   ];
+  var eur = function (x) {
+    try { return new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(x); }
+    catch (e) { return x.toFixed(2).replace('.', ',') + ' €'; }
+  };
+  F.forEach(function (f) { f.prezzo = Math.round(f.litri * PREZZO_LITRO * 100) / 100; });
   var wrap = document.getElementById('formats');
   F.forEach(function (f) {
     var c = document.createElement('div');
     c.className = 'format'; c.id = 'fmt-' + f.id;
     c.innerHTML = ICON[f.icon] +
-      '<h3>' + f.name + '</h3><p class="size">' + f.size + '</p><p class="price">Prezzo su richiesta</p>' +
+      '<h3>' + f.name + '</h3><p class="size">' + f.size + '</p><p class="price">' + eur(f.prezzo) + '</p>' +
       '<div class="stepper" role="group" aria-label="Quantità ' + f.name + ' ' + f.size + '">' +
       '<button type="button" data-d="-1" aria-label="Togli una ' + f.name.toLowerCase() + ' ' + f.size + '">−</button>' +
       '<output id="q-' + f.id + '" aria-live="polite">0</output>' +
@@ -902,11 +913,14 @@ p { margin: 0; }
       card.classList.toggle('active', f.q > 0);
       card.querySelector('[data-d="-1"]').disabled = f.q === 0;
     });
+    var totale = items.reduce(function (t, f) { return t + f.prezzo * f.q; }, 0);
     list.innerHTML = items.length
-      ? items.map(function (f) { return '<li><span>' + f.name + ' ' + f.size + '</span><span>× ' + f.q + '</span></li>'; }).join('')
+      ? items.map(function (f) { return '<li><span>' + f.name + ' ' + f.size + ' × ' + f.q + '</span><span>' + eur(f.prezzo * f.q) + '</span></li>'; }).join('') +
+        '<li class="total"><span>Totale</span><span>' + eur(totale) + '</span></li>'
       : '<li class="empty">Aggiungi almeno un formato.</li>';
     var lines = ["Ciao! Vorrei prenotare l'olio nuovo Mazzocchetti:"];
-    items.forEach(function (f) { lines.push('• ' + f.name + ' ' + f.size + ' × ' + f.q); });
+    items.forEach(function (f) { lines.push('• ' + f.name + ' ' + f.size + ' × ' + f.q + ' = ' + eur(f.prezzo * f.q)); });
+    if (items.length) lines.push('Totale: ' + eur(totale));
     var n = nameIn.value.trim(), note = noteIn.value.trim();
     if (n) lines.push('Nome: ' + n);
     if (note) lines.push('Note: ' + note);
